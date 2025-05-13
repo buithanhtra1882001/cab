@@ -1,0 +1,58 @@
+name: Deploy to Amazon EC2
+
+on:
+  push:
+    branches: [ "dev" ]
+
+env:
+  SERVER_IP: "116.118.51.232"
+  SERVER_USER: "ubuntu"
+  SERVER_PORT: "22"
+  SERVER_DEST_PATH: "/home/ubuntu/cab-payment-service"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '6.0.x' ]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
+    - uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+
+    # - name: Appsetings
+    #   run: echo '${{ secrets.APP_SETTINGS }}' > src/CabPaymentService/appsettings.Development.json
+
+    - name: Install dependencies
+      run: dotnet restore src/CabPaymentService
+
+    - name: Build
+      run: dotnet build src/CabPaymentService --configuration Release -p:Environment=Development
+
+    - name: Publish
+      run: dotnet publish src/CabPaymentService --no-restore -c Release
+
+    - name: Configure SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo "StrictHostKeyChecking no" >> ~/.ssh/config
+
+    - name: Deploy
+      run: |
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" --progress /home/runner/work/cab-payment-service/cab-payment-service/src/CabPaymentService/bin/Release/net6.0/publish/ $SERVER_USER@$SERVER_IP:$SERVER_DEST_PATH
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'sudo systemctl restart cab-payment-service.service'
+        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP 'sudo systemctl status cab-payment-service.service' 
