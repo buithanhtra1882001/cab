@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    cab-identity-service:
+        image: registry.gitlab.com/cabvn/cab-services/cab-identity-service:latest
+        container_name: cab-identity-service
+        restart: unless-stopped
+        networks:
+            - internal
+
+volumes:
+    mongodata:
+        
+networks:
+    internal:
+        name: cabvn

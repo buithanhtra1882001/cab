@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+    cab-identity-service:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - OrchestratorType=K8S
+            - IdentityDbConnectionString=Host=51.79.254.106;Database=IdentityDb;Username=postgres;Password=mysecretpassword
+            - EventBus__Connection=51.79.254.106
+            - EventBus__UserName=guest
+            - EventBus__Password=guest
+            - EventBus__SubscriptionClientName=CaIdentityService
+            - EventBus__RetryCount=5
+            - EventBus__ExchangeName=cabservice_event_bus
+            - EventBus__AzureServiceBusEnabled=false
+            
+    # cassandra-web:
+    #     environment:
+    #         # Since this image only accept ip address, so please get ip from cassandra container via docker inspect
+    #         - CASSANDRA_HOST=192.168.160.4
+    #         - CASSANDRA_USER=cassandra
+    #         - CASSANDRA_PASSWORD=cassandra
+    
+    # postgres:
+        # environment:
+            # - POSTGRES_USER=postgres
+            # - POSTGRES_PASSWORD=mysecretpassword
+
+    # rabbitmq:
+        # environment:
+            # - RABBITMQ_DEFAULT_USER=guest
+            # - RABBITMQ_DEFAULT_PASS=guest
+
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn
