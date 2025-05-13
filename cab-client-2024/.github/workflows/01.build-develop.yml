@@ -1,0 +1,30 @@
+name: 01.build-develop
+on:
+  push:
+    branches: ['develop']
+env:
+  DEPLOYMENT_NAME: cab-client
+  IMAGE: cab-client-dev
+  INGRESS_IP: api.devcab.org
+  DOT_ENV_FILE_NAME: .env.develop
+jobs:
+  variables:
+    name: setup variable
+    runs-on: ubuntu-latest
+    outputs:
+      DEPLOYMENT_NAME: ${{ env.DEPLOYMENT_NAME }}
+      IMAGE: ${{ env.IMAGE }}
+      INGRESS_IP: ${{ env.INGRESS_IP }}
+      DOT_ENV_FILE_NAME: ${{ env.DOT_ENV_FILE_NAME }}
+    steps:
+      - name: Echo
+        run: echo prepare variable
+  cab-client:
+    needs: variables
+    name: deploy cab-client
+    uses: ./.github/workflows/00.gke-deployment.yml
+    with:
+      DEPLOYMENT_NAME: ${{ needs.variables.outputs.DEPLOYMENT_NAME }}
+      IMAGE: ${{ needs.variables.outputs.IMAGE }}
+      INGRESS_IP: ${{ needs.variables.outputs.INGRESS_IP }}
+      DOT_ENV_FILE_NAME: ${{ needs.variables.outputs.DOT_ENV_FILE_NAME }}
