@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "NotificationService": {
+      "commandName": "Project",
+      "applicationUrl": "http://localhost:9025;",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {},
+      "publishAllPorts": true
+    }
+  }
+}

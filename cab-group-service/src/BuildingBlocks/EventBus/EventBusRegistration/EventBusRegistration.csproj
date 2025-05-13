@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>CAB.BuildingBlocks.EventBusRegistration</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Autofac" Version="6.3.0"/>
+		<PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0"/>
+		<PackageReference Include="RabbitMQ.Client" Version="6.2.2"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\EventBusRabbitMQ\EventBusRabbitMQ.csproj"/>
+		<ProjectReference Include="..\EventBusServiceBus\EventBusServiceBus.csproj"/>
+		<ProjectReference Include="..\EventBus\EventBus.csproj"/>
+	</ItemGroup>
+</Project>

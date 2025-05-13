@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    
+    cab-notification-service:
+        image: registry.gitlab.com/cabvn/cab-services/cab-notification-service:latest
+        container_name: cab-notification-service
+        restart: unless-stopped
+        networks:
+            - internal
+
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn
