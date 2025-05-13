@@ -1,0 +1,69 @@
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/api/{version}/admin/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 9005
+                }
+            ],
+            "UpstreamPathTemplate": "/{version}/media-service/admin/{everything}",
+            "UpstreamHttpMethod": [
+                "Get",
+                "Post",
+                "Put",
+                "Delete"
+            ],
+            "AddQueriesToRequest": {
+                "auid": "Claims[Uuid] > value",
+            },
+            "RouteClaimsRequirement": {
+                "Role": "Admin"
+            },
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "SsoAuth"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 9005
+                }
+            ],
+            "UpstreamPathTemplate": "/{version}/media-service/{everything}",
+            "UpstreamHttpMethod": [
+                "Post",
+                "Put",
+                "Delete"
+            ],
+            "AddQueriesToRequest": {
+                "auid": "Claims[Uuid] > value",
+            },
+            "RouteClaimsRequirement": {
+                "Role": "User"
+            },
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "SsoAuth"
+            }
+        },
+        {
+            "DownstreamPathTemplate": "/api/{version}/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 9003
+                }
+            ],
+            "UpstreamPathTemplate": "/{version}/media-service/{everything}",
+            "UpstreamHttpMethod": [
+                "Get"
+            ]
+        }
+    ]
+}

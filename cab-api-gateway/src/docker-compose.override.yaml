@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+    cab-api-gateway:
+        container_name: cab-api-gateway
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - GatewayUrl=https://api.cab.vn
+            - OcelotRoutesFolder=OcelotRoutes
+            - GroupSwaggerConfigs__0__SwaggerName=CabIdentityService V1
+            - GroupSwaggerConfigs__0__SwaggerEndpoint=http://cab-identity-service/swagger/v1/swagger.json
+            - GroupSwaggerConfigs__1__SwaggerName=CabUserService V1
+            - GroupSwaggerConfigs__1__SwaggerEndpoint=http://cab-user-service/swagger/v1/swagger.json
+            - GroupSwaggerConfigs__2__SwaggerName=CabPostService V1
+            - GroupSwaggerConfigs__2__SwaggerEndpoint=http://cab-post-service/swagger/v1/swagger.json
+            - GroupSwaggerConfigs__3__SwaggerName=CabMediaService V1
+            - GroupSwaggerConfigs__3__SwaggerEndpoint=http://cab-media-service/swagger/v1/swagger.json
+            - GroupSwaggerConfigs__4__SwaggerName=CabPaymentService V1
+            - GroupSwaggerConfigs__4__SwaggerEndpoint=http://cab-payment-service/swagger/v1/swagger.json
+
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn

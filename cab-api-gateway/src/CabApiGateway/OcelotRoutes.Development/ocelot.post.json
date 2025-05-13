@@ -1,0 +1,89 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/hubs/post",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/hubs/post",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    {
+      "DownstreamPathTemplate": "/hubs/post/{path}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/hubs/post/{path}",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    
+    {
+      "DownstreamPathTemplate": "/api/{version}/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/post-service/admin/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/post-service/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9003
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/post-service/{everything}",
+      "UpstreamHttpMethod": [ "Get" ]
+    }
+  ]
+}

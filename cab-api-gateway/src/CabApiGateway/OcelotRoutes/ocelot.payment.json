@@ -1,0 +1,44 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/v1/vnpay/vnp-ipn",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "cab-payment-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/payment-service/vnpay/vnp-ipn",
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "cab-payment-service",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/payment-service/{everything}",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+    cab-api-gateway:
+        image: registry.gitlab.com/cabvn/cab-services/cab-api-gateway:latest
+        restart: unless-stopped
+        networks:
+            - internal
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn

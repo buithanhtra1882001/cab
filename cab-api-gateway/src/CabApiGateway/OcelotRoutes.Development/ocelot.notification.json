@@ -1,0 +1,55 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/hub",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9022
+        }
+      ],
+      "UpstreamPathTemplate": "/hub",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    {
+      "DownstreamPathTemplate": "/hub/{path}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9022
+        }
+      ],
+      "UpstreamPathTemplate": "/hub/{path}",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9022
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/notification-service/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    }
+  ]
+}

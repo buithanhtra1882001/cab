@@ -1,0 +1,99 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/hubs",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/hubs",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    {
+      "DownstreamPathTemplate": "/hubs/{path}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/hubs/{path}",
+      "QoSOptions": {
+        "TimeoutValue": 320000
+      },
+      "Priority": 50
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/user-service/admin/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value",
+        "userRole": "Claims[Role] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin,Mod"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/admin/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/user-service/admin/{everything}",
+      "UpstreamHttpMethod": [ "Delete" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value",
+        "userRole": "Claims[Role] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "Admin"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{version}/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 9002
+        }
+      ],
+      "UpstreamPathTemplate": "/{version}/user-service/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "AddQueriesToRequest": {
+        "auid": "Claims[Uuid] > value"
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "SsoAuth"
+      }
+    }
+  ]
+}
