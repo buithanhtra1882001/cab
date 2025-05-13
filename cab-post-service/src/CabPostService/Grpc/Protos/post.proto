@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "CabPostService.Grpc.Protos.PostServer";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+service PostProtoService {
+	rpc GetPostAsync (PostResquest) returns (PostResponse);
+	rpc CreatePostVideoAsync (PostResquest) returns (PostResponse);
+	rpc GetWeightConstants (google.protobuf.Empty) returns (WeightConstantsResponse);
+}
+
+message PostResquest {
+	string postId = 1;
+}
+
+
+message PostResponse {
+	string id = 1;
+    string userId = 2;
+    bool adminBoost = 3;
+    string postType = 4;
+    string categoryId = 5;
+    repeated string hashtag_Ids = 6;
+    repeated string hashtags = 7;
+    string content = 8;
+    repeated string imageUrls = 9;
+    repeated string videoUrls = 10;
+    int32 likesCount = 11;
+    int32 commentsCount = 12;
+    bool isDonateOpen = 13;
+    google.protobuf.Timestamp updatedAt = 14;
+	google.protobuf.Timestamp createdAt = 15;
+    string Title = 16;
+}
+
+message WeightConstantsResponse{
+	 int32 CategoryScoreWeight = 1;
+     int32 UpVoteWeight = 2;
+     int32 DownVoteWeight = 3;
+     int32 TotalCommentsWeight = 4;
+     int32 TotalViewsWeight = 5;
+     int32 AdminBoostWeight = 6;
+}

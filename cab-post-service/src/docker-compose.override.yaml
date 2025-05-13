@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+    cab-post-service:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - Cassandra__Host=51.79.254.106
+            - Cassandra__Port=9042
+            - Cassandra__UserName=cassandra
+            - Cassandra__Password=cassandra
+            - Cassandra__Keyspace=postdb
+            - EventBus__Connection=51.79.254.106
+            - EventBus__UserName=guest
+            - EventBus__Password=guest
+            - EventBus__SubscriptionClientName=CabPostService
+            - EventBus__RetryCount=5
+            - EventBus__ExchangeName=cabservice_event_bus
+            - EventBus__AzureServiceBusEnabled=false
+            - UserService__BaseAddress=http://cab-user-service:81
+            - OrchestratorType=K8S
+            - PostDbConnectionString=Host=51.79.254.106;Database=PostDb;Username=postgres;Password=mysecretpassword
+            - Cache__AbsoluteExpiration=30
+            - ShardNumber=1
+
+    # cassandra:
+        # environment: 
+            # - CASSANDRA_USER=cassandra
+            # - CASSANDRA_PASSWORD=cassandra
+    
+    # cassandra-init-data:
+        # environment:
+            # - CASSANDRA_USER=cassandra
+            # - CASSANDRA_PASSWORD=cassandra
+
+    # postgres:
+        # environment:
+            # - POSTGRES_USER=postgres
+            # - POSTGRES_PASSWORD=mysecretpassword
+
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn

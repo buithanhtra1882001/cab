@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "CabPostService.Grpc.Protos.UserClient";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service UserProtoService {
+	rpc GetUser (GetUserRequest) returns (UserModel);
+	rpc GetUserFriendIds (GetUserFriendIdsRequest) returns (FriendIds);
+	rpc GetWeightConstants (google.protobuf.Empty) returns (UserWeightConstantsResponse);
+}
+
+message GetUserRequest {
+	string userId = 1;
+}
+
+message GetUserFriendIdsRequest {
+	string userId = 1;
+}
+
+message UserModel {
+	string userId = 1;
+	string userName = 2;
+	string email = 3;
+	string fullName = 4;
+	string dob = 5;
+	string phone = 6;
+	string city = 7;
+	string avatar = 8;
+	google.protobuf.Timestamp updatedAt = 9;
+	google.protobuf.Timestamp createdAt = 10;
+}
+
+message FriendIds {
+	repeated string ids = 1;
+}
+message UserWeightConstantsResponse{
+	int32 PosterScoreWeight = 1;
+} 
