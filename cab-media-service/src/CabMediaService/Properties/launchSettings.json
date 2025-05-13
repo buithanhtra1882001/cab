@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "CabMediaService": {
+      "commandName": "Project",
+      "applicationUrl": "http://localhost:9005;",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {},
+      "publishAllPorts": true
+    }
+  }
+}

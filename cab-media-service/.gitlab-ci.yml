@@ -1,0 +1,60 @@
+# do not use "latest" here, if you want this to work in the future
+image: docker:19
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - release
+  - deploy
+
+before_script:
+  - docker version
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - ls -lR
+    - docker build src -f "src/CabMediaService/Dockerfile" --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA --tag $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+release:
+  stage: release
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+deploy:
+  stage: deploy
+  only:
+    - main
+  before_script:
+    - apk update && apk add openssh-client bash && apk add rsync
+  script:
+    - eval $(ssh-agent -s)
+    
+    - echo $SSH_PRIVATE_KEY
+
+    - bash -c 'ssh-add <(echo "$SSH_PRIVATE_KEY")'
+
+    - mkdir -p ~/.ssh
+
+    - ssh-keyscan -H $SSH_SERVER_IP >> ~/.ssh/known_hosts
+
+    - chmod 644 ~/.ssh/known_hosts
+    - rsync -avz -e 'ssh' src/docker-compose.yaml src/docker-compose.override.yaml ${SSH_USER}@${SSH_SERVER_IP}:${PATH_TO_PROJECT} --delete --force
+
+    - >
+      ssh $SSH_USER@$SSH_SERVER_IP
+      "docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY};
+      cd ${PATH_TO_PROJECT};
+      docker-compose down;
+      docker pull ${CI_REGISTRY_IMAGE}:latest;
+      docker-compose up -d;
+      docker image prune -f;"

@@ -1,0 +1,21 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "CabMediaService.Grpc.Protos.MediaServer";
+
+package grpcmediaservicetask;
+
+service MediaProtoService {
+    rpc UploadFile (FileRequest) returns (FileUploadStatus);
+}
+
+message FileRequest {
+    bytes content = 1;
+    string user_id = 2;
+    string type = 3;
+}
+
+message FileUploadStatus {
+    int32 percentage_complete = 1;
+    bool is_complete = 2;
+}
+
