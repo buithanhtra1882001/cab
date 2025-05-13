@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    cab-user-service:
+        image: registry.gitlab.com/cabvn/cab-services/cab-user-service
+        container_name: cab-user-service
+        restart: unless-stopped
+        networks:
+            - internal
+            
+volumes:
+    mongodata:
+
+networks:
+    internal:
+        name: cabvn

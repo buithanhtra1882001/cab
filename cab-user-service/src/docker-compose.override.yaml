@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+    cab-user-service:
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - Cassandra__Host=51.79.254.106
+            - Cassandra__Port=9042
+            - Cassandra__UserName=cassandra
+            - Cassandra__Password=cassandra
+            - Cassandra__Keyspace=userdb
+            - EventBus__Connection=51.79.254.106
+            - EventBus__UserName=guest
+            - EventBus__Password=guest
+            - EventBus__SubscriptionClientName=CabUserService
+            - EventBus__RetryCount=5
+            - EventBus__ExchangeName=cabservice_event_bus
+            - EventBus__AzureServiceBusEnabled=false
+            - MediaService__BaseAddress=http://cab-media-service:80
+            - GRPC_PORT=81
+            - PORT=80
+            - OrchestratorType=K8S
+            - UserDbConnectionString=Host=51.79.254.106;Database=UserDb;Username=postgres;Password=mysecretpassword
+            - MinIOSettings__EndPoint=51.79.254.106:9000
+            - MinIOSettings__AccessKey=cabvn
+            - MinIOSettings__SecretKey=cabvn@test
+            - MinIOSettings__BucketName=cabvn
+            - MinIOSettings__Location=us-east-1
+    # cassandra:
+        # environment:
+            # - CASSANDRA_USER=cassandra
+            # - CASSANDRA_PASSWORD=cassandra
+
+    # cassandra-init-data:
+        # environment:
+            # - CASSANDRA_USER=cassandra
+            # - CASSANDRA_PASSWORD=cassandra
+
+volumes:
+    mongodata:
+networks:
+    internal:
+        name: cabvn

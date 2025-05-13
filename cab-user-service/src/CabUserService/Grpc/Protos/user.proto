@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "CabUserService.Grpc.Profos.UserServer";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+service UserProtoService {
+	rpc GetUserProfile (GetUserProfileRequest) returns (UserModel);
+	rpc GetUserFriendIds (GetUserFriendIdsRequest) returns (FriendIds);
+}
+
+message GetUserProfileRequest {
+	string userId = 1;
+}
+
+message GetUserFriendIdsRequest {
+	string userId = 1;
+}
+
+message UserModel {
+	google.protobuf.StringValue UserId = 1;
+	google.protobuf.StringValue UserName = 2;
+	google.protobuf.StringValue Email = 3;
+	google.protobuf.StringValue FullName = 4;
+	google.protobuf.StringValue Dob = 5;
+	google.protobuf.StringValue Phone = 6;
+	google.protobuf.StringValue City = 7;
+	google.protobuf.StringValue Avatar = 8;
+	google.protobuf.Timestamp UpdatedAt = 9;
+	google.protobuf.Timestamp CreatedAt = 10;
+}
+
+message FriendIds {
+	repeated string ids = 1;
+}
